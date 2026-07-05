@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mission Terminal · Briefing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== THEMES ===== */
+    :root {
+      --bg: #fcfcfc;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text: #1a1a1a;
+      --text-dark: #1a1a1a;
+      --accent: #d32f2f;
+      --accent-glow: rgba(211, 47, 47, 0.3);
+      --border: rgba(211, 47, 47, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(211, 47, 47, 0.3);
+      --label-color: #7f3f3f;
+      --stamp-color: #d32f2f;
+      --stamp-glow: rgba(211, 47, 47, 0.3);
+      --stamp-border: #d32f2f;
+      --btn-primary-bg: #d32f2f;
+      --btn-primary-text: #ffffff;
+      --btn-success-bg: #d32f2f;
+      --btn-success-text: #ffffff;
+    }
+    /* IPS-N: Grey + Deep Blue */
+    .theme-ipsn {
+      --bg: #1c1c1e;
+      --card-bg: rgba(28, 28, 30, 0.95);
+      --text: #e0e0e0;
+      --text-dark: #e0e0e0;
+      --accent: #1a5276;
+      --accent-glow: rgba(26, 82, 118, 0.4);
+      --border: rgba(26, 82, 118, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --input-border: rgba(26, 82, 118, 0.3);
+      --label-color: #7f8c8d;
+      --stamp-color: #1a5276;
+      --stamp-glow: rgba(26, 82, 118, 0.4);
+      --stamp-border: #1a5276;
+      --btn-primary-bg: #1a5276;
+      --btn-primary-text: #ffffff;
+      --btn-success-bg: #2e86c1;
+      --btn-success-text: #ffffff;
+    }
+    /* SSC: White + Gold */
+    .theme-ssc {
+      --bg: #f8f4e8;
+      --card-bg: rgba(248, 244, 232, 0.95);
+      --text: #1c1c1c;
+      --text-dark: #1c1c1c;
+      --accent: #d4a017;
+      --accent-glow: rgba(212, 160, 23, 0.3);
+      --border: rgba(212, 160, 23, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(212, 160, 23, 0.3);
+      --label-color: #6b5b2b;
+      --stamp-color: #b7950b;
+      --stamp-glow: rgba(183, 149, 11, 0.3);
+      --stamp-border: #b7950b;
+      --btn-primary-bg: #d4a017;
+      --btn-primary-text: #ffffff;
+      --btn-success-bg: #2ecc71;
+      --btn-success-text: #ffffff;
+    }
+    /* HORUS: Black + Neon Green */
+    .theme-horus {
+      --bg: #0a0a0a;
+      --card-bg: rgba(10, 10, 10, 0.95);
+      --text: #d0e0d0;
+      --text-dark: #d0e0d0;
+      --accent: #00ff41;
+      --accent-glow: rgba(0, 255, 65, 0.4);
+      --border: rgba(0, 255, 65, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.03);
+      --input-border: rgba(0, 255, 65, 0.25);
+      --label-color: #6a8a6a;
+      --stamp-color: #00ff41;
+      --stamp-glow: rgba(0, 255, 65, 0.4);
+      --stamp-border: #00ff41;
+      --btn-primary-bg: #00ff41;
+      --btn-primary-text: #000000;
+      --btn-success-bg: #00ff41;
+      --btn-success-text: #000000;
+    }
+    /* Harrison Armory: White + Purple */
+    .theme-ha {
+      --bg: #f4f0f8;
+      --card-bg: rgba(244, 240, 248, 0.95);
+      --text: #1a0e2b;
+      --text-dark: #1a0e2b;
+      --accent: #8e44ad;
+      --accent-glow: rgba(142, 68, 173, 0.3);
+      --border: rgba(142, 68, 173, 0.35);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(142, 68, 173, 0.3);
+      --label-color: #5d3a6b;
+      --stamp-color: #8e44ad;
+      --stamp-glow: rgba(142, 68, 173, 0.3);
+      --stamp-border: #8e44ad;
+      --btn-primary-bg: #8e44ad;
+      --btn-primary-text: #ffffff;
+      --btn-success-bg: #2ecc71;
+      --btn-success-text: #ffffff;
+    }
+
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Share Tech Mono', 'Segoe UI', monospace;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      transition: background 0.4s ease;
+    }
+    .lancer-card {
+      max-width: 960px;
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.3);
+      transition: all 0.4s ease;
+      position: relative;
+    }
+    .lancer-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px);
+      pointer-events: none;
+      border-radius: 24px;
+      z-index: 0;
+    }
+    .lancer-card > * { position: relative; z-index: 1; }
+
+    /* ===== HEADER with NEON GLOW ===== */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header .sys {
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent-glow);
+    }
+    .header .sys span {
+      color: var(--stamp-color);
+      text-shadow: 0 0 8px var(--stamp-color), 0 0 20px var(--stamp-glow);
+    }
+    .header .status {
+      font-size: 13px;
+      color: var(--label-color);
+      background: rgba(255,255,255,0.04);
+      padding: 4px 16px;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      letter-spacing: 1px;
+    }
+    .header .status .blink {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      margin-right: 8px;
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse-dot 1.4s infinite;
+    }
+    @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.3; transform:scale(0.7); } }
+
+    /* ===== PAGES ===== */
+    .page { display: none; }
+    .page.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { 0% { opacity:0; transform:translateY(8px); } 100% { opacity:1; transform:translateY(0); } }
+
+    /* ===== FORM ===== */
+    .theme-selector {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .theme-selector label {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--label-color);
+    }
+    .theme-selector select {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-family: 'Share Tech Mono', 'Segoe UI', monospace;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+    }
+    .theme-selector select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,0,0,0.1); }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 30px;
+    }
+    .form-group { margin-bottom: 6px; }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--label-color);
+      margin-bottom: 6px;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'Share Tech Mono', 'Segoe UI', monospace;
+      font-size: 15px;
+      color: var(--text);
+      transition: 0.25s ease;
+      outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.1);
+      background: rgba(255,255,255,0.05);
+    }
+    .form-group textarea { min-height: 90px; resize: vertical; }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      padding: 12px 32px;
+      border-radius: 60px;
+      border: none;
+      cursor: pointer;
+      transition: 0.25s ease;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      border: 1px solid var(--btn-primary-bg);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: scale(1.02); }
+    .btn-secondary {
+      border-color: rgba(255,0,229,0.3);
+      color: #ff66d0;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); border-color: var(--stamp-color); }
+    .btn-success {
+      background: var(--btn-success-bg);
+      color: var(--btn-success-text);
+      border: 1px solid var(--btn-success-bg);
+      box-shadow: 0 0 24px rgba(0,255,136,0.3);
+    }
+    .btn-success:hover { filter: brightness(1.1); }
+
+    /* ===== LINK PAGE ===== */
+    #linkPage .link-container {
+      text-align: center;
+      padding: 20px 0;
+    }
+    #linkPage .success-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+    #linkPage h3 {
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      color: var(--btn-success-bg);
+      margin-bottom: 8px;
+      font-size: 22px;
+      text-shadow: 0 0 12px var(--btn-success-bg);
+    }
+    #linkPage p { margin-bottom: 20px; color: var(--text); }
+    .share-area {
+      background: rgba(255,255,255,0.04);
+      border-radius: 14px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      max-width: 100%;
+    }
+    .share-area input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      font-family: 'Share Tech Mono', 'Segoe UI', monospace;
+      font-size: 13px;
+      padding: 6px 0;
+      outline: none;
+      min-width: 140px;
+    }
+    .share-area .copy-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 6px 18px;
+      color: var(--accent);
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: 0.2s;
+      text-transform: uppercase;
+    }
+    .share-area .copy-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent); }
+    .link-actions { margin-top: 28px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== PLAYER PAGE with NEON GLOW ===== */
+    .briefing-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+    .briefing-header .subhead {
+      font-size: 12px;
+      color: var(--label-color);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .briefing-header .title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .briefing-header .codename {
+      font-size: 28px;
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      margin: 0;
+      text-shadow: 0 0 12px var(--accent-glow);
+    }
+    .theme-ssc .briefing-header .codename,
+    .theme-ha .briefing-header .codename,
+    .theme-gms .briefing-header .codename {
+      color: #1a1a1a;
+      text-shadow: 0 0 12px var(--accent-glow);
+    }
+    .briefing-header .logo-img {
+      max-height: 40px;
+      max-width: 120px;
+      object-fit: contain;
+    }
+    .briefing-header .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+    .briefing-header .difficulty-badge {
+      font-size: 14px;
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 40px;
+      border: 1px solid currentColor;
+      background: rgba(255,255,255,0.04);
+      letter-spacing: 1px;
+      text-shadow: 0 0 6px currentColor;
+    }
+    .digital-stamp {
+      font-family: 'Share Tech Mono', 'Segoe UI', monospace;
+      font-size: 13px;
+      color: var(--stamp-color);
+      border: 2px solid var(--stamp-border);
+      padding: 4px 16px;
+      border-radius: 4px;
+      letter-spacing: 3px;
+      background: rgba(255,255,255,0.02);
+      box-shadow: 0 0 16px var(--stamp-glow);
+      text-shadow: 0 0 8px var(--stamp-color);
+      animation: blink-border 1.2s step-end infinite;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    @keyframes blink-border {
+      0%, 100% { border-color: var(--stamp-border); }
+      50% { border-color: transparent; }
+    }
+
+    /* For light themes, dark text in briefing body */
+    .theme-ssc .briefing-item .value,
+    .theme-ha .briefing-item .value,
+    .theme-gms .briefing-item .value {
+      color: #1c1c1c;
+    }
+    .theme-ssc .briefing-item .value.notes,
+    .theme-ha .briefing-item .value.notes,
+    .theme-gms .briefing-item .value.notes {
+      background: rgba(0,0,0,0.04);
+      border-left-color: var(--accent);
+      color: #1c1c1c;
+    }
+
+    .briefing-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px 36px;
+    }
+    .briefing-item { margin-bottom: 12px; }
+    .briefing-item .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--label-color);
+      display: block;
+      margin-bottom: 2px;
+    }
+    .briefing-item .value {
+      font-size: 17px;
+      color: var(--text-dark);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+    .briefing-item.full { grid-column: 1 / -1; }
+    .briefing-item .value.notes {
+      background: rgba(255,255,255,0.03);
+      padding: 12px 16px;
+      border-radius: 10px;
+      border-left: 3px solid var(--accent);
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+    #playerPage .acknowledge-wrap {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* ===== DECRYPT OVERLAY – longer animation ===== */
+    #decryptOverlay {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    #decryptOverlay.active {
+      display: block;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+    .spinner-ring {
+      display: inline-block;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      border: 4px solid rgba(255,255,255,0.05);
+      border-top: 4px solid var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 16px var(--accent-glow);
+      animation: spin-ring 1s linear infinite;
+    }
+    @keyframes spin-ring {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    #decryptOverlay .msg {
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      letter-spacing: 4px;
+      color: var(--accent);
+      font-size: 18px;
+      text-shadow: 0 0 16px var(--accent-glow);
+    }
+    #decryptOverlay .progress-bar {
+      width: 80%;
+      max-width: 300px;
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      margin: 20px auto 0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    #decryptOverlay .progress-bar .fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      box-shadow: 0 0 20px var(--accent);
+      border-radius: 4px;
+      animation: fill-progress 3.5s ease forwards;
+    }
+    @keyframes fill-progress { 0% { width:0%; } 100% { width:100%; } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 700px) {
+      .lancer-card { padding: 24px 18px; }
+      .form-grid { grid-template-columns: 1fr; gap: 12px; }
+      .form-group.full-width { grid-column: 1; }
+      .briefing-body { grid-template-columns: 1fr; gap: 12px; }
+      .briefing-item.full { grid-column: 1; }
+      .briefing-header .codename { font-size: 22px; }
+      .header .sys { font-size: 16px; }
+      .btn { font-size: 11px; padding: 10px 22px; }
+      .share-area { flex-direction: column; align-items: stretch; }
+      .briefing-header .title-row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 450px) {
+      .header { flex-direction: column; align-items: flex-start; }
+      .briefing-header .meta-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+    .text-muted { color: var(--label-color); font-size: 13px; }
+  </style>
+</head>
+<body>
+<div class="lancer-card" id="app">
+  <!-- ===== HEADER ===== -->
+  <div class="header">
+    <div class="sys">⌨ MISSION TERMINAL · <span>BRIEFING</span></div>
+    <div class="status"><span class="blink"></span> SECURE CHANNEL · v2.4</div>
+  </div>
+
+  <!-- ===== PAGE 1: GM FORM ===== -->
+  <div id="gmPage" class="page active">
+    <div class="theme-selector">
+      <label for="themeSelect">Manufacturer Theme</label>
+      <select id="themeSelect">
+        <option value="gms" selected>GMS</option>
+        <option value="ipsn">IPS-N</option>
+        <option value="ssc">SSC</option>
+        <option value="horus">HORUS</option>
+        <option value="ha">Harrison Armory</option>
+      </select>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group"><label>Mission Codename</label><input type="text" id="missionName" placeholder="e.g. OPERATION: ECHO FALL" /></div>
+      <div class="form-group"><label>Mission Difficulty</label>
+        <select id="difficulty">
+          <option value="Minimal" style="color:#66ff66;">Minimal</option>
+          <option value="Low" style="color:#aaff44;">Low</option>
+          <option value="Moderate" selected style="color:#ffff00;">Moderate</option>
+          <option value="High" style="color:#ff8800;">High</option>
+          <option value="Code Red" style="color:#ff0000;">Code Red</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Planet / System</label><input type="text" id="planet" placeholder="e.g. Cressidium, Boundary Garden" /></div>
+      <div class="form-group full-width"><label>Primary Objective</label><input type="text" id="objective" placeholder="e.g. Extract high-value asset from HORUS-held facility" /></div>
+      <div class="form-group"><label>Possible Opposition</label><input type="text" id="enemy" placeholder="e.g. HORUS cultists, GMS rogue mechs" /></div>
+      <div class="form-group"><label>Issuing Callsign</label><input type="text" id="issuer" placeholder="e.g. Union Command, Baron's Office" /></div>
+      <div class="form-group"><label>Assigned Lancer(s)</label><input type="text" id="squad" placeholder='e.g. Squad "Havoc", Pilot "Kestrel"' /></div>
+      <div class="form-group full-width"><label>Full Transmission</label><textarea id="notes" placeholder="Complete mission briefing text..."></textarea></div>
+      <div class="form-group full-width"><label>Manufacturer Logo URL</label><input type="text" id="logoUrl" placeholder="https://example.com/logo.png (optional)" /></div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" id="generateBtn">ENCRYPT &amp; GENERATE LINK</button>
+      <button class="btn btn-secondary" id="clearBtn">CLEAR</button>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 2: LINK GENERATOR ===== -->
+  <div id="linkPage" class="page">
+    <div class="link-container">
+      <span class="success-icon">✅</span>
+      <h3>LINK GENERATED</h3>
+      <p>Copy this link and share it with your players.</p>
+      <div class="share-area">
+        <input type="text" id="generatedLink" readonly />
+        <button class="copy-btn" id="copyLinkBtn">COPY</button>
+        <span id="copyFeedback" style="font-size:12px;color:var(--btn-success-bg);"></span>
+      </div>
+      <div class="link-actions">
+        <button class="btn btn-secondary" id="newBriefingBtn">NEW BRIEFING</button>
+        <button class="btn btn-primary" id="viewBriefingBtn">PREVIEW BRIEFING</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DECRYPT OVERLAY ===== -->
+  <div id="decryptOverlay">
+    <div class="spinner-ring"></div>
+    <div class="msg">DECRYPTING BRIEFING</div>
+    <div class="progress-bar"><div class="fill"></div></div>
+  </div>
+
+  <!-- ===== PAGE 3: PLAYER BRIEFING ===== -->
+  <div id="playerPage" class="page">
+    <div class="briefing-header">
+      <div class="subhead">◈ MISSION DISPATCH ◈</div>
+      <div class="title-row">
+        <div class="codename" id="displayName">OPERATION: ECHO FALL</div>
+        <img id="displayLogo" class="logo-img" src="" alt="Manufacturer Logo" style="display:none;" />
+      </div>
+      <div class="meta-row">
+        <span class="difficulty-badge" id="displayDifficulty">Threat Level: MODERATE</span>
+        <span class="digital-stamp">◆ ENCRYPTED ◆</span>
+      </div>
+    </div>
+    <div class="briefing-body">
+      <div class="briefing-item"><span class="label">Planet / System</span><div class="value" id="displayPlanet">Cressidium</div></div>
+      <div class="briefing-item"><span class="label">Issuing Callsign</span><div class="value" id="displayIssuer">Union Command</div></div>
+      <div class="briefing-item"><span class="label">Assigned Lancer(s)</span><div class="value" id="displaySquad">Squad "Havoc"</div></div>
+      <div class="briefing-item"><span class="label">Possible Opposition</span><div class="value" id="displayEnemy">HORUS cultists</div></div>
+      <div class="briefing-item full"><span class="label">Primary Objective</span><div class="value" id="displayObjective">Extract high‑value asset.</div></div>
+      <div class="briefing-item full"><span class="label">Full Transmission</span><div class="value notes" id="displayNotes">No transmission.</div></div>
+    </div>
+    <div class="acknowledge-wrap">
+      <button class="btn btn-success" id="acknowledgeBtn">ACKNOWLEDGE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== DOM refs =====
+  const gmPage = document.getElementById('gmPage');
+  const linkPage = document.getElementById('linkPage');
+  const playerPage = document.getElementById('playerPage');
+  const decryptOverlay = document.getElementById('decryptOverlay');
+
+  const missionName = document.getElementById('missionName');
+  const planet = document.getElementById('planet');
+  const objective = document.getElementById('objective');
+  const enemy = document.getElementById('enemy');
+  const issuer = document.getElementById('issuer');
+  const squad = document.getElementById('squad');
+  const notes = document.getElementById('notes');
+  const difficulty = document.getElementById('difficulty');
+  const logoUrl = document.getElementById('logoUrl');
+  const themeSelect = document.getElementById('themeSelect');
+
+  const generateBtn = document.getElementById('generateBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const newBriefingBtn = document.getElementById('newBriefingBtn');
+  const viewBriefingBtn = document.getElementById('viewBriefingBtn');
+  const acknowledgeBtn = document.getElementById('acknowledgeBtn');
+
+  const displayName = document.getElementById('displayName');
+  const displayPlanet = document.getElementById('displayPlanet');
+  const displayObjective = document.getElementById('displayObjective');
+  const displayEnemy = document.getElementById('displayEnemy');
+  const displayIssuer = document.getElementById('displayIssuer');
+  const displaySquad = document.getElementById('displaySquad');
+  const displayNotes = document.getElementById('displayNotes');
+  const displayDifficulty = document.getElementById('displayDifficulty');
+  const displayLogo = document.getElementById('displayLogo');
+
+  const generatedLink = document.getElementById('generatedLink');
+  const copyLinkBtn = document.getElementById('copyLinkBtn');
+  const copyFeedback = document.getElementById('copyFeedback');
+
+  let currentData = null;
+
+  // ===== Helpers =====
+  function encodeData(data) {
+    try { return btoa(encodeURIComponent(JSON.stringify(data))); } catch(e) { console.error(e); return null; }
+  }
+  function decodeData(encoded) {
+    try { return JSON.parse(decodeURIComponent(atob(encoded))); } catch(e) { console.error(e); return null; }
+  }
+  function getFormData() {
+    return {
+      missionName: missionName.value.trim() || 'UNTITLED OPERATION',
+      planet: planet.value.trim() || 'UNKNOWN SYSTEM',
+      objective: objective.value.trim() || 'NO OBJECTIVE SPECIFIED',
+      enemy: enemy.value.trim() || 'UNKNOWN FORCES',
+      issuer: issuer.value.trim() || 'UNKNOWN COMMAND',
+      squad: squad.value.trim() || 'UNASSIGNED',
+      notes: notes.value.trim() || 'No transmission.',
+      difficulty: difficulty.value || 'Moderate',
+      logo: logoUrl.value.trim() || '',
+      theme: themeSelect.value || 'gms'
+    };
+  }
+  function populateBriefing(data) {
+    displayName.textContent = data.missionName || 'UNTITLED OPERATION';
+    displayPlanet.textContent = data.planet || 'UNKNOWN SYSTEM';
+    displayObjective.textContent = data.objective || 'NO OBJECTIVE SPECIFIED';
+    displayEnemy.textContent = data.enemy || 'UNKNOWN FORCES';
+    displayIssuer.textContent = data.issuer || 'UNKNOWN COMMAND';
+    displaySquad.textContent = data.squad || 'UNASSIGNED';
+    displayNotes.textContent = data.notes || 'No transmission.';
+
+    const diff = data.difficulty || 'Moderate';
+    displayDifficulty.textContent = 'Threat Level: ' + diff.toUpperCase();
+    const diffColors = {
+      'Minimal': '#66ff66',
+      'Low': '#aaff44',
+      'Moderate': '#ffff00',
+      'High': '#ff8800',
+      'Code Red': '#ff0000'
+    };
+    const color = diffColors[diff] || '#ffff00';
+    displayDifficulty.style.color = color;
+    displayDifficulty.style.borderColor = color;
+
+    if (data.logo && data.logo.trim() !== '') {
+      displayLogo.src = data.logo.trim();
+      displayLogo.style.display = 'inline-block';
+      displayLogo.onerror = function() { this.style.display = 'none'; };
+    } else {
+      displayLogo.style.display = 'none';
+    }
+  }
+  function applyTheme(theme) {
+    const card = document.querySelector('.lancer-card');
+    card.classList.remove('theme-gms', 'theme-ipsn', 'theme-ssc', 'theme-horus', 'theme-ha');
+    if (theme && theme !== 'gms') { card.classList.add('theme-' + theme); }
+  }
+
+  // ===== Page switching =====
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+  }
+
+  // ===== Decrypt & show player briefing =====
+  function showPlayerBriefing(data) {
+    gmPage.classList.remove('active');
+    linkPage.classList.remove('active');
+    playerPage.classList.remove('active');
+    decryptOverlay.classList.add('active');
+    decryptOverlay.style.display = 'block';
+
+    const fill = decryptOverlay.querySelector('.fill');
+    fill.style.animation = 'none';
+    void fill.offsetWidth;
+    fill.style.animation = 'fill-progress 3.5s ease forwards';
+
+    if (data.theme) { applyTheme(data.theme); }
+
+    // ⏱️ Wait 3.5 seconds before showing the briefing
+    setTimeout(() => {
+      decryptOverlay.classList.remove('active');
+      decryptOverlay.style.display = 'none';
+      populateBriefing(data);
+      showPage('playerPage');
+    }, 3500);
+  }
+
+  // ===== Generate link (GM) =====
+  function generateLink() {
+    const data = getFormData();
+    const encoded = encodeData(data);
+    if (!encoded) { alert('Error encoding mission data.'); return; }
+
+    currentData = data;
+    const url = window.location.origin + window.location.pathname + '#' + encoded;
+    window.location.hash = encoded;
+
+    showPage('linkPage');
+    generatedLink.value = url;
+  }
+
+  // ===== Load from hash (player) =====
+  function loadFromHash() {
+    const hash = window.location.hash.substring(1);
+    if (!hash) {
+      showPage('gmPage');
+      applyTheme(themeSelect.value);
+      return;
+    }
+    const data = decodeData(hash);
+    if (!data) {
+      showPage('gmPage');
+      alert('The briefing link appears to be corrupted.');
+      return;
+    }
+    currentData = data;
+    showPlayerBriefing(data);
+  }
+
+  // ===== Copy link =====
+  function copyLink(input, feedback) {
+    const link = input.value;
+    if (!link) return;
+    navigator.clipboard.writeText(link).then(() => {
+      feedback.textContent = 'Copied!';
+      setTimeout(() => { feedback.textContent = ''; }, 2500);
+    }).catch(() => {
+      input.select();
+      document.execCommand('copy');
+      feedback.textContent = 'Copied!';
+      setTimeout(() => { feedback.textContent = ''; }, 2500);
+    });
+  }
+
+  // ===== New briefing =====
+  function newBriefing() {
+    if (window.location.hash) {
+      history.pushState('', document.title, window.location.pathname + window.location.search);
+    }
+    missionName.value = ''; planet.value = ''; objective.value = ''; enemy.value = ''; issuer.value = ''; squad.value = ''; notes.value = ''; logoUrl.value = '';
+    difficulty.value = 'Moderate';
+    showPage('gmPage');
+    applyTheme(themeSelect.value);
+  }
+
+  // ===== Preview briefing (from link page) =====
+  function previewBriefing() {
+    if (currentData) {
+      showPlayerBriefing(currentData);
+    } else {
+      alert('No briefing data found. Generate a link first.');
+    }
+  }
+
+  // ===== Acknowledge =====
+  function acknowledge() {
+    alert('ACKNOWLEDGED. Good hunting, Lancer.');
+  }
+
+  // ===== Theme change =====
+  themeSelect.addEventListener('change', function() { applyTheme(this.value); });
+
+  // ===== Event listeners =====
+  generateBtn.addEventListener('click', generateLink);
+  clearBtn.addEventListener('click', newBriefing);
+  newBriefingBtn.addEventListener('click', newBriefing);
+  viewBriefingBtn.addEventListener('click', previewBriefing);
+  acknowledgeBtn.addEventListener('click', acknowledge);
+  copyLinkBtn.addEventListener('click', function() {
+    copyLink(generatedLink, copyFeedback);
+  });
+
+  document.querySelectorAll('#gmPage input, #gmPage textarea, #gmPage select').forEach(el => {
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && el.tagName !== 'TEXTAREA' && el.tagName !== 'SELECT') {
+        e.preventDefault();
+        generateBtn.click();
+      }
+    });
+  });
+
+  // ===== Init =====
+  window.addEventListener('load', loadFromHash);
+  window.addEventListener('hashchange', loadFromHash);
+})();
+</script>
+</body>
+</html>
